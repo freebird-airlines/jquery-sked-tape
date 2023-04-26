@@ -1,5 +1,5 @@
 /**
- * jQuery.skedTape v2.5.0
+ * jQuery.skedTape v2.6.0
  * License: MIT
  * Author: Alexander Korostin <lexkrstn@gmail.com>
  */
@@ -245,6 +245,7 @@ SkedTape.prototype = {
 		}
 
 		var start = entry.start instanceof Date ? entry.start : new Date(entry.start);
+		var actualStart = entry.actualStart instanceof Date ? entry.actualStart : new Date(entry.actualStart);
 		var end = entry.end instanceof Date ? entry.end : new Date(entry.end);
 
 		if (!isValidTimeRange(start, end)) {
@@ -257,6 +258,7 @@ SkedTape.prototype = {
 			name: entry.name,
 			location: entry.location + '',
 			start: start,
+			actualStart: actualStart,
 			end: end,
 			data: entry.data ? $.extend({}, entry.data) : null,
 			url: entry.url || false,
@@ -726,13 +728,26 @@ SkedTape.prototype = {
 			.toggleClass('sked-tape__event--active', !!event.active)
 			.attr('title', event.name)
 			.css({
+				display: "flex",
 				width: this.computeEventWidth(event),
 				left: this.computeEventOffset(event)
 			});
+
+		var $delay = $('<div class="sked-tape__delay"/>')
+			.text("")
+			.css({
+				width: this.computeEventDelayWidth(event),
+			})
+			.appendTo($event);
+
 		// Append the center aligner node with text context
 		var $center = $('<div class="sked-tape__center"/>')
+			.css({
+				overflow: "hidden"
+			})
 			.text(event.name)
 			.appendTo($event);
+			
 		if (this.showEventTime || this.showEventDuration) {
 			var html = $center.html();
 			var duration = this.format.roundDuration(event.end - event.start);
@@ -744,6 +759,7 @@ SkedTape.prototype = {
 				html += '<br>' + this.format.duration(duration);
 			}
 			$center.html(html);
+			$delay.html("dsds")
 		}
 		// Bind data-*
 		$event.data($.extend({}, { eventId: event.id }, event.data));
@@ -762,11 +778,18 @@ SkedTape.prototype = {
 
 		return $event;
 	},
+
+
 	computeEventWidth: function (event) {
 		// Clamp to timeline edge
 		var eventEnd = this.end < event.end ? this.end : event.end;
 		var durationHours = getDurationHours(event.start, eventEnd);
 		return durationHours / getDurationHours(this.start, this.end) * 100 + '%';
+	},
+	computeEventDelayWidth: function (event) {
+		var durationHours = getDurationHours(event.start, event.actualStart);
+		let x =  durationHours / getDurationHours(event.start,event.end) * 100  + '%';
+		return x
 	},
 	computeEventOffset: function (event) {
 		var hoursBeforeEvent = getDurationHours(this.start, event.start);
