@@ -1,5 +1,5 @@
 /**
- * jQuery.skedTape v2.6.0
+ * jQuery.skedTape v2.7.0
  * License: MIT
  * Author: Alexander Korostin <lexkrstn@gmail.com>
  */
@@ -787,6 +787,11 @@ SkedTape.prototype = {
 		return durationHours / getDurationHours(this.start, this.end) * 100 + '%';
 	},
 	computeEventDelayWidth: function (event) {
+		
+		if(event.data.is_rtg || event.data.is_diverted) {
+			return 0
+		}
+
 		var durationHours = getDurationHours(event.start, event.actualStart);
 		let x =  durationHours / getDurationHours(event.start,event.end) * 100  + '%';
 		return x

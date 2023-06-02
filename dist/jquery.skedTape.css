@@ -1,5 +1,5 @@
 /**
- * jQuery.skedTape v2.6.0
+ * jQuery.skedTape v2.7.0
  * License: MIT
  * Author: Alexander Korostin <lexkrstn@gmail.com>
  */
