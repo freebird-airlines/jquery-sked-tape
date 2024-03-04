@@ -875,10 +875,7 @@ SkedTape.prototype = {
 
 		setTimeout($.proxy(function () {
 			var bodyClass = TWBS_MAJOR >= 4 ? 'body' : 'content';
-			var template = '<div class="popover" role="tooltip">' +
-				'<div class="arrow"></div>' +
-				'<div class="popover-' + bodyClass + '"></div>' +
-				'</div>';
+
 			this.$el.find('.sked-tape__event').each($.proxy(function (i, el) {
 				var $entry = $(el);
 				var tooSmall = $entry.width() < $entry.data('min-width');
@@ -886,17 +883,45 @@ SkedTape.prototype = {
 				var right = left + parseFloat($entry[0].style.width);
 				var TOLERANCE = 0.01;
 				var overflows = left < -TOLERANCE || right > 100 + TOLERANCE;
+
 				if (
-					$.fn.popover && this.showPopovers !== 'never' &&
+					this.showPopovers !== 'never' &&
 					(tooSmall || overflows || this.showPopovers === 'always')
 				) {
-					$entry.popover({
-						trigger: 'hover',
-						content: $entry.find('.sked-tape__center').html(),
-						html: true,
-						template: template,
-						placement: left < 50 ? 'right' : 'left'
-					});
+
+					let event = this.getEvent($($entry[0]).data("eventId"))
+					if (event) {
+						debugger
+						let crewMembers = event.data.crew_members.map(crewMember => crewMember.crew_code + '(' + crewMember.role + ')')
+						var popover = new bootstrap.Popover($entry[0], {
+							trigger: 'hover',
+							title: event.data.flight_number,
+							content: function () {
+								let html = '<div>' +
+									' <div class="d-flex flex-wrap">' +
+									'<div class="flex-row-fluid mb-7">' +
+									'<span class="d-block fw-bold mb-4">Route</span>' +
+									'<span class="d-block">' + event.data.departure_airport.icao_code + '(' + event.data.departure_airport.iata_code + ')' + '->' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
+									'</div>' +
+									'<div class="me-12 d-flex flex-column mb-7">' +
+									'<span class="d-block fw-bold mb-4">STD</span>' +
+									'<span>' + event.data.std + '</span>' +
+									'</div>' +
+									'<div class="me-12 d-flex flex-column mb-7">' +
+									'<span class="d-block fw-bold mb-4">STA</span>' +
+									'<span>' + event.data.sta + '</span>' +
+									'</div>' +
+									'</div>' +
+									'<p><b>Crew Members :</b> ' + crewMembers.toString() + '</p>' +
+									'</div>'
+								return html
+							},
+							sanitize: false,
+							html: true,
+							placement: left < 50 ? 'right' : 'left'
+						})
+					}
+
 				}
 			}, this));
 		}, this), 0);
