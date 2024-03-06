@@ -937,16 +937,16 @@ SkedTape.prototype = {
 							content: function () {
 								let html = '<div>' +
 									' <div class="d-flex flex-wrap">' +
-									'<div class="flex-row-fluid mb-7">' +
-									'<span class="d-block fw-bold mb-4">Route</span>' +
-									'<span class="d-block">' + event.data.departure_airport.icao_code + '(' + event.data.departure_airport.iata_code + ')' + '->' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
+									'<div class="flex-row-fluid mb-4">' +
+									'<span class="d-block fw-bold">Route</span>' +
+									'<span class="d-block">' + event.data.departure_airport.icao_code + '(' + event.data.departure_airport.iata_code + ')' + ' -> ' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
 									'</div>' +
-									'<div class="me-12 d-flex flex-column mb-7">' +
-									'<span class="d-block fw-bold mb-4">STD</span>' +
+									'<div class="me-12 d-flex flex-column mb-4">' +
+									'<span class="d-block fw-bold">STD</span>' +
 									'<span>' + event.data.std + '</span>' +
 									'</div>' +
-									'<div class="me-12 d-flex flex-column mb-7">' +
-									'<span class="d-block fw-bold mb-4">STA</span>' +
+									'<div class="me-12 d-flex flex-column mb-4">' +
+									'<span class="d-block fw-bold">STA</span>' +
 									'<span>' + event.data.sta + '</span>' +
 									'</div>' +
 									'</div>' +
