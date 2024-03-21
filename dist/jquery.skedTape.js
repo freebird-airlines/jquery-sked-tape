@@ -930,7 +930,7 @@ SkedTape.prototype = {
 
 					let event = this.getEvent($($entry[0]).data("eventId"))
 					if (event) {
-						let crewMembers = event.data.crew_members.map(crewMember => crewMember.full_name + '(' + crewMember.role + ')')
+						let crewMembers = event.data.crew_members.map(crewMember => crewMember.user.full_name + '(' + crewMember.role + ')')
 						var popover = new bootstrap.Popover($entry[0], {
 							trigger: 'hover',
 							title: event.data.flight_number,
