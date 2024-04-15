@@ -748,12 +748,12 @@ SkedTape.prototype = {
 	},
 	computeEventDelayWidth: function (event) {
 
-		if(event.data.is_rtg || event.data.is_diverted) {
+		if (event.data.is_rtg || event.data.is_diverted) {
 			return 0
 		}
 
 		var durationHours = getDurationHours(event.start, event.actualStart);
-		let x =  durationHours / getDurationHours(event.start,event.end) * 100  + '%';
+		let x = durationHours / getDurationHours(event.start, event.end) * 100 + '%';
 		return x
 	},
 	computeEventOffset: function (event) {
@@ -891,7 +891,11 @@ SkedTape.prototype = {
 
 					let event = this.getEvent($($entry[0]).data("eventId"))
 					if (event) {
-						let crewMembers = event.data.crew_members.map(crewMember => crewMember.user.full_name + '(' + crewMember.role + ')')
+						let crewMembers = event.data.crew_members.map(crewMember => {
+							if (crewMember.user) {
+								return crewMember.user.full_name + '(' + crewMember.role + ')'
+							}
+						})
 						var popover = new bootstrap.Popover($entry[0], {
 							trigger: 'hover',
 							title: event.data.flight_number,
