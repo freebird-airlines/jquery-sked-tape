@@ -930,42 +930,42 @@ SkedTape.prototype = {
 
 					let event = this.getEvent($($entry[0]).data("eventId"))
 					if (event) {
-						let crewMembers = [];
 						if (event.data.crew_members) {
-							crewMembers = event.data.crew_members.map(crewMember => {
+							let crewMembers = event.data.crew_members.map(crewMember => {
 								if (crewMember.user) {
 									return crewMember.user.full_name + '(' + crewMember.role + ')'
 								}
 							})
+
+							var popover = new bootstrap.Popover($entry[0], {
+								trigger: 'hover',
+								title: event.data.flight_number,
+								content: function () {
+									let html = '<div>' +
+										' <div class="d-flex flex-wrap">' +
+										'<div class="flex-row-fluid mb-4">' +
+										'<span class="d-block fw-bold">Route</span>' +
+										'<span class="d-block">' + event.data.departure_airport.icao_code + '(' + event.data.departure_airport.iata_code + ')' + ' -> ' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
+										'</div>' +
+										'<div class="me-12 d-flex flex-column mb-4">' +
+										'<span class="d-block fw-bold">STD</span>' +
+										'<span>' + event.data.std + '</span>' +
+										'</div>' +
+										'<div class="me-12 d-flex flex-column mb-4">' +
+										'<span class="d-block fw-bold">STA</span>' +
+										'<span>' + event.data.sta + '</span>' +
+										'</div>' +
+										'</div>' +
+										'<p><b>Crew Members :</b> ' + crewMembers.toString() + '</p>' +
+										'</div>'
+									return html
+								},
+								sanitize: false,
+								html: true,
+								placement: left < 50 ? 'right' : 'left'
+							})
 						}
 						
-						var popover = new bootstrap.Popover($entry[0], {
-							trigger: 'hover',
-							title: event.data.flight_number,
-							content: function () {
-								let html = '<div>' +
-									' <div class="d-flex flex-wrap">' +
-									'<div class="flex-row-fluid mb-4">' +
-									'<span class="d-block fw-bold">Route</span>' +
-									'<span class="d-block">' + event.data.departure_airport.icao_code + '(' + event.data.departure_airport.iata_code + ')' + ' -> ' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
-									'</div>' +
-									'<div class="me-12 d-flex flex-column mb-4">' +
-									'<span class="d-block fw-bold">STD</span>' +
-									'<span>' + event.data.std + '</span>' +
-									'</div>' +
-									'<div class="me-12 d-flex flex-column mb-4">' +
-									'<span class="d-block fw-bold">STA</span>' +
-									'<span>' + event.data.sta + '</span>' +
-									'</div>' +
-									'</div>' +
-									'<p><b>Crew Members :</b> ' + crewMembers.toString() + '</p>' +
-									'</div>'
-								return html
-							},
-							sanitize: false,
-							html: true,
-							placement: left < 50 ? 'right' : 'left'
-						})
 					}
 
 				}
