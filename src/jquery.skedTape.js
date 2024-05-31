@@ -892,9 +892,10 @@ SkedTape.prototype = {
 					let event = this.getEvent($($entry[0]).data("eventId"))
 					if (event) {
 						if (event.data.crew_members) {
-							let crewMembers = event.data.crew_members.map(crewMember => {
+							let crewMembers = ""
+							event.data.crew_members.forEach(crewMember => {
 								if (crewMember.user) {
-									return crewMember.user.full_name + '(' + crewMember.role + ')'
+									crewMembers = crewMembers + '<li>'+ crewMember.user.full_name + ' (' + crewMember.role + ')</li>'
 								}
 							})
 
@@ -902,23 +903,24 @@ SkedTape.prototype = {
 								trigger: 'hover',
 								title: event.data.flight_number,
 								content: function () {
-									let html = '<div>' +
-										' <div class="d-flex flex-wrap">' +
-										'<div class="flex-row-fluid mb-4">' +
-										'<span class="d-block fw-bold">Route</span>' +
-										'<span class="d-block">' + event.data.departure_airport.icao_code + '(' + event.data.departure_airport.iata_code + ')' + ' -> ' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
-										'</div>' +
-										'<div class="me-12 d-flex flex-column mb-4">' +
-										'<span class="d-block fw-bold">STD</span>' +
-										'<span>' + event.data.std + '</span>' +
-										'</div>' +
-										'<div class="me-12 d-flex flex-column mb-4">' +
-										'<span class="d-block fw-bold">STA</span>' +
-										'<span>' + event.data.sta + '</span>' +
-										'</div>' +
-										'</div>' +
-										'<p><b>Crew Members :</b> ' + crewMembers.toString() + '</p>' +
-										'</div>'
+									 
+								let html =  '<div>' +
+												'<div class="d-flex flex-wrap">' +
+													'<div class="w-100 mb-4 d-flex justify-content-between">' +
+														'<div class="d-flex flex-column">' +
+															'<span class="fw-bold">' + event.data.departure_airport.icao_code + ' (' + event.data.departure_airport.iata_code + ')' + '</span>' +
+															'<span>' + event.data.std + '</span>' +
+														'</div>' +
+														'<div class="text-center" style="widht:50px"> -> </div>' +
+														'<div class="d-flex flex-column">' +
+															'<span class="fw-bold">' + event.data.arrival_airport.icao_code + '(' + event.data.arrival_airport.iata_code + ')' + '</span>' +
+															'<span>' + event.data.sta + '</span>' +
+														'</div>' +
+													'</div>' +
+												'</div>' +
+												'<span class="d-block fw-bold">Crew Members</span>' +
+												'<ul class="m-0 p-0 list-unstyled">' + crewMembers + '</ul>' +
+											'</div>'
 									return html
 								},
 								sanitize: false,
